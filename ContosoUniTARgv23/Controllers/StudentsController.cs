@@ -38,7 +38,7 @@ namespace ContosoUniTARgv23.Controllers
                     break;
             }
 
-            return View();
+            return View(await students.AsNoTracking().ToListAsync());
         }
 
 
