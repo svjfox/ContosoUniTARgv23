@@ -14,15 +14,27 @@ namespace ContosoUniTARgv23.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(
+            string sortOrder,
+            string searchString,
+            string currentFilter,
+            int? pageNumber)
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["CurrentFilter"] = searchString;
 
             var students = from s in _context.Students
                            select s;
 
-            switch (sortOrder)
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                 students = students.Where(s => s.LastName.Contains(searchString)
+                                     || s.FirstMidName.Contains(searchString));
+            }
+
+
+                switch (sortOrder)
             {
                 case "name_desc":
                     students = students.OrderByDescending(s => s.LastName);
