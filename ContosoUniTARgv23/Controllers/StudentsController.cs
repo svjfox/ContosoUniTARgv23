@@ -16,13 +16,22 @@ namespace ContosoUniTARgv23.Controllers
 
         public async Task<IActionResult> Index(
             string sortOrder,
-            string searchString,
             string currentFilter,
+            string searchString,
             int? pageNumber)
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-            ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentSort"] = sortOrder;
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
 
             var students = from s in _context.Students
                            select s;
@@ -35,7 +44,7 @@ namespace ContosoUniTARgv23.Controllers
 
 
                 switch (sortOrder)
-            {
+                {
                 case "name_desc":
                     students = students.OrderByDescending(s => s.LastName);
                     break;
@@ -48,9 +57,14 @@ namespace ContosoUniTARgv23.Controllers
                 default:
                     students = students.OrderBy(s => s.LastName);
                     break;
-            }
+                }
 
-            return View(await students.AsNoTracking().ToListAsync());
+
+            int pageSize = 3;
+
+            
+
+            return View(await PaginatedList<Student>.CreateAsync(students.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
 
