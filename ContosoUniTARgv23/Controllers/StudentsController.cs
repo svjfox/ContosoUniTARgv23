@@ -9,7 +9,10 @@ namespace ContosoUniTARgv23.Controllers
     {
         private readonly SchoolContext _context;
 
-        public StudentsController(SchoolContext context)
+        public StudentsController
+            (
+                SchoolContext context
+            )
         {
             _context = context;
         }
@@ -20,7 +23,7 @@ namespace ContosoUniTARgv23.Controllers
             string searchString,
             int? pageNumber)
         {
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
             ViewData["CurrentSort"] = sortOrder;
 
@@ -38,13 +41,12 @@ namespace ContosoUniTARgv23.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                 students = students.Where(s => s.LastName.Contains(searchString)
-                                     || s.FirstMidName.Contains(searchString));
+                students = students.Where(s => s.LastName.Contains(searchString)
+                                        || s.FirstMidName.Contains(searchString));
             }
 
-
-                switch (sortOrder)
-                {
+            switch (sortOrder)
+            {
                 case "name_desc":
                     students = students.OrderByDescending(s => s.LastName);
                     break;
@@ -57,16 +59,11 @@ namespace ContosoUniTARgv23.Controllers
                 default:
                     students = students.OrderBy(s => s.LastName);
                     break;
-                }
-
+            }
 
             int pageSize = 3;
-
-            
-
             return View(await PaginatedList<Student>.CreateAsync(students.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
-
 
 
         public async Task<IActionResult> Details(int? id)
@@ -79,12 +76,14 @@ namespace ContosoUniTARgv23.Controllers
             var student = await _context.Students
                 .Include(s => s.Enrollments)
                     .ThenInclude(e => e.Course)
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync(m => m.Id == id);
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (student == null)
             {
                 return NotFound();
             }
+
             return View(student);
         }
 
@@ -92,10 +91,6 @@ namespace ContosoUniTARgv23.Controllers
         {
             return View();
         }
-
-
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -105,23 +100,22 @@ namespace ContosoUniTARgv23.Controllers
             {
                 //if (ModelState.IsValid)
                 //{
-                    _context.Add(student);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                _context.Add(student);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
                 //}
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Unable to save changes. " +
-                    "Try again, and if the problem persists, " +
-                    "see your system administrator.");
+                ModelState.AddModelError("", "Unable to save changes." +
+                    "Try again, and if the problem persists " +
+                    "see your system administrator");
             }
 
             return View(student);
-
         }
 
-
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -137,29 +131,30 @@ namespace ContosoUniTARgv23.Controllers
             return View(student);
         }
 
-
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Student student)
+        public async Task<IActionResult> Edit(Student student)
         {
-            if (id != student.Id)
+            if (student.Id != student.Id)
             {
                 return NotFound();
             }
-
+            //if (ModelState.IsValid)
+            //{
             try
             {
                 _context.Update(student);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException /* ex */)
             {
+                //Log the error (uncomment ex variable name and write a log.)
                 ModelState.AddModelError("", "Unable to save changes. " +
                     "Try again, and if the problem persists, " +
                     "see your system administrator.");
             }
-
+            //}
             return View(student);
         }
 
@@ -172,7 +167,7 @@ namespace ContosoUniTARgv23.Controllers
 
             var student = await _context.Students
                 .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (student == null)
             {
                 return NotFound();
@@ -181,7 +176,7 @@ namespace ContosoUniTARgv23.Controllers
             if (saveChangesError.GetValueOrDefault())
             {
                 ViewData["ErrorMessage"] =
-                    "Delete failed. Try again, and if the problem persists " +
+                    "Delete failed. Try again, and if the problem presists " +
                     "see your system administrator.";
             }
 
@@ -189,10 +184,8 @@ namespace ContosoUniTARgv23.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-
         [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmation(int id)
         {
             var student = await _context.Students.FindAsync(id);
             if (student == null)
@@ -206,7 +199,7 @@ namespace ContosoUniTARgv23.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
             }

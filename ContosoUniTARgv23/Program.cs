@@ -20,7 +20,6 @@ namespace ContosoUniTARgv23
             var app = builder.Build();
             CreateDbIfNotExists(app);
 
-
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -50,7 +49,7 @@ namespace ContosoUniTARgv23
                     try
                     {
                         var context = services.GetRequiredService<SchoolContext>();
-                        DbInitializer.Intialize(context);
+                        DbInitializer.Initialize(context);
                     }
                     catch (Exception ex)
                     {

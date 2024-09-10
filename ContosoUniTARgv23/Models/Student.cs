@@ -8,12 +8,12 @@ namespace ContosoUniTARgv23.Models
     public class Student
     {
         public int Id { get; set; }
-        [Required] 
-        [StringLength(50, MinimumLength =  2)]
+        [Required]
+        [StringLength(50, MinimumLength = 2)]
         [Display(Name = "Last Name")]
-        
         public string LastName { get; set; }
 
+        [Required]
         [StringLength(50)]
         [Column("FirstName")]
         [Display(Name = "Last Name")]
@@ -22,7 +22,6 @@ namespace ContosoUniTARgv23.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Enrollment Date")]
-
         public DateTime EnrollmentDate { get; set; }
 
         [Display(Name = "Full Name")]
