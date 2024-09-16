@@ -18,7 +18,7 @@ namespace ContosoUniTARgv23.Controllers
         }
 
         public async Task<IActionResult> Index(
-            string sortOrder,
+            string sortOrder, 
             string currentFilter,
             string searchString,
             int? pageNumber)
@@ -100,9 +100,9 @@ namespace ContosoUniTARgv23.Controllers
             {
                 //if (ModelState.IsValid)
                 //{
-                _context.Add(student);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                    _context.Add(student);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 //}
             }
             catch (Exception ex)
@@ -141,19 +141,19 @@ namespace ContosoUniTARgv23.Controllers
             }
             //if (ModelState.IsValid)
             //{
-            try
-            {
-                _context.Update(student);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            catch (DbUpdateException /* ex */)
-            {
-                //Log the error (uncomment ex variable name and write a log.)
-                ModelState.AddModelError("", "Unable to save changes. " +
-                    "Try again, and if the problem persists, " +
-                    "see your system administrator.");
-            }
+                try
+                {
+                    _context.Update(student);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException /* ex */)
+                {
+                    //Log the error (uncomment ex variable name and write a log.)
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists, " +
+                        "see your system administrator.");
+                }
             //}
             return View(student);
         }
@@ -199,11 +199,10 @@ namespace ContosoUniTARgv23.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException) 
             {
                 return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
             }
         }
-
     }
 }

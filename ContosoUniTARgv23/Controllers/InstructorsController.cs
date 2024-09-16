@@ -3,6 +3,7 @@ using ContosoUniTARgv23.Models;
 using ContosoUniTARgv23.Models.SchoolViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using InstructorIndexData = ContosoUniTARgv23.Models.SchoolViewModels.InstructorIndexData;
 
 namespace ContosoUniTARgv23.Controllers
 {
@@ -20,7 +21,7 @@ namespace ContosoUniTARgv23.Controllers
 
         public async Task<IActionResult> Index(int? id, int? courseID)
         {
-            var viewModel = new Models.InstructorIndexData();
+            var viewModel = new InstructorIndexData();
             viewModel.Instructors = await _context.Instructors
                   .Include(i => i.OfficeAssignment)
                   .Include(i => i.CourseAssignments)
@@ -137,14 +138,14 @@ namespace ContosoUniTARgv23.Controllers
                 .Include(i => i.OfficeAssignment)
                 .Include(i => i.CourseAssignments).ThenInclude(i => i.Course)
                 .AsNoTracking()
-                .SingleOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (instructor == null)
             {
                 return NotFound();
             }
-
             PopulateAssignedCourseData(instructor);
+
             return View(instructor);
         }
 
@@ -163,7 +164,7 @@ namespace ContosoUniTARgv23.Controllers
                     .ThenInclude(i => i.Course)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
-            if (await TryUpdateModelAsync<Instructor>(
+            if(await TryUpdateModelAsync<Instructor>(
                 instructorToUpdate,
                 "",
                 i => i.FirstMidName, i => i.LastName, i => i.HireDate, i => i.OfficeAssignment))
@@ -208,12 +209,8 @@ namespace ContosoUniTARgv23.Controllers
                 {
                     if (!instructorCourses.Contains(course.CourseId))
                     {
-                        instructorToUpdate.CourseAssignments.Add(new CourseAssignment
-                        {
-                            InstructorId =
-                            instructorToUpdate.Id,
-                            CourseId = course.CourseId
-                        });
+                        instructorToUpdate.CourseAssignments.Add(new CourseAssignment { InstructorId = 
+                            instructorToUpdate.Id, CourseId = course.CourseId });
                     }
                 }
                 else
@@ -227,9 +224,8 @@ namespace ContosoUniTARgv23.Controllers
                     }
                 }
             }
-
-            
         }
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -238,7 +234,7 @@ namespace ContosoUniTARgv23.Controllers
             }
 
             var instructor = await _context.Instructors
-                .SingleOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (instructor == null)
             {
@@ -247,10 +243,9 @@ namespace ContosoUniTARgv23.Controllers
 
             return View(instructor);
         }
-        
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             Instructor instructor = await _context.Instructors
@@ -260,12 +255,11 @@ namespace ContosoUniTARgv23.Controllers
             var departments = await _context.Departments
                 .Where(d => d.InstructorId == id)
                 .ToListAsync();
-            departments.ForEach(d=> d.InstructorId = null);
+            departments.ForEach(d => d.InstructorId = null);
 
             _context.Instructors.Remove(instructor);
 
             await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(Index));
         }
     }

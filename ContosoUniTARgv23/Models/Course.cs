@@ -20,6 +20,5 @@ namespace ContosoUniTARgv23.Models
         public Department Department { get; set; }
         public ICollection<Enrollment> Enrollments { get; set; }
         public ICollection<CourseAssignment> CourseAssignment { get; set; }
-
     }
 }

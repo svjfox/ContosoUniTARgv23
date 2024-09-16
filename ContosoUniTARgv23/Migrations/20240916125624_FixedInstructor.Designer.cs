@@ -4,6 +4,7 @@ using ContosoUniTARgv23.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContosoUniTARgv23.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20240916125624_FixedInstructor")]
+    partial class FixedInstructor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,6 +132,10 @@ namespace ContosoUniTARgv23.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("FirstName");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("HireDate")
                         .HasColumnType("datetime2");
 
@@ -139,7 +146,11 @@ namespace ContosoUniTARgv23.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Instructor", (string)null);
+                    b.ToTable("Instructor", null, t =>
+                        {
+                            t.Property("FirstName")
+                                .HasColumnName("FirstName1");
+                        });
                 });
 
             modelBuilder.Entity("ContosoUniTARgv23.Models.OfficeAssignment", b =>

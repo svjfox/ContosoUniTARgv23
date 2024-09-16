@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ContosoUniTARgv23.Data
 {
-    public class SchoolContext: DbContext
+    public class SchoolContext : DbContext
     {
-        public SchoolContext(DbContextOptions<SchoolContext> options) : base(options)
+        public SchoolContext(DbContextOptions<SchoolContext> options) : base(options) 
         {
         }
 

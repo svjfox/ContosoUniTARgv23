@@ -1,10 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace ContosoUniTARgv23.Models
 {
-   
     public class Student
     {
         public int Id { get; set; }
@@ -26,11 +25,11 @@ namespace ContosoUniTARgv23.Models
 
         [Display(Name = "Full Name")]
         public string FullName
-        {
+        { 
             get
-            {
+            { 
                 return LastName + ", " + FirstMidName;
-            }
+            } 
         }
 
         public ICollection<Enrollment> Enrollments { get; set; }
