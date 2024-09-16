@@ -30,6 +30,7 @@ namespace ContosoUniTARgv23.Models
 
         public ICollection<CourseAssignment> CourseAssignments { get; set; }
         public OfficeAssignment OfficeAssignment { get; set; }
+        public object FirstMidName { get; internal set; }
 
     }
 }
