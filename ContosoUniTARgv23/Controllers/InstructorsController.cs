@@ -3,7 +3,6 @@ using ContosoUniTARgv23.Models;
 using ContosoUniTARgv23.Models.SchoolViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using InstructorIndexData = ContosoUniTARgv23.Models.SchoolViewModels.InstructorIndexData;
 
 namespace ContosoUniTARgv23.Controllers
 {
@@ -21,7 +20,7 @@ namespace ContosoUniTARgv23.Controllers
 
         public async Task<IActionResult> Index(int? id, int? courseID)
         {
-            var viewModel = new InstructorIndexData();
+            var viewModel = new ContosoUniTARgv23.Models.SchoolViewModels.InstructorIndexData();
             viewModel.Instructors = await _context.Instructors
                   .Include(i => i.OfficeAssignment)
                   .Include(i => i.CourseAssignments)
@@ -164,7 +163,7 @@ namespace ContosoUniTARgv23.Controllers
                     .ThenInclude(i => i.Course)
                 .FirstOrDefaultAsync(s => s.Id == id);
 
-            if(await TryUpdateModelAsync<Instructor>(
+            if (await TryUpdateModelAsync<Instructor>(
                 instructorToUpdate,
                 "",
                 i => i.FirstMidName, i => i.LastName, i => i.HireDate, i => i.OfficeAssignment))
@@ -209,8 +208,12 @@ namespace ContosoUniTARgv23.Controllers
                 {
                     if (!instructorCourses.Contains(course.CourseId))
                     {
-                        instructorToUpdate.CourseAssignments.Add(new CourseAssignment { InstructorId = 
-                            instructorToUpdate.Id, CourseId = course.CourseId });
+                        instructorToUpdate.CourseAssignments.Add(new CourseAssignment
+                        {
+                            InstructorId =
+                            instructorToUpdate.Id,
+                            CourseId = course.CourseId
+                        });
                     }
                 }
                 else

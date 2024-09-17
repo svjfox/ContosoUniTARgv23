@@ -1,15 +1,15 @@
-﻿@model IEnumerable<ContosoUniTARgv23.Models.Course> 
+﻿@model IEnumerable<ContosoUniTARgv23.Models.Course>
 
 @{
     ViewData["Title"] = "Courses";
 }
+
 <h2>Courses</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-
-<table>
+<table class="table">
     <thead>
         <tr>
             <th>
@@ -24,18 +24,13 @@
             <th>
                 @Html.DisplayNameFor(model => model.Department)
             </th>
-
-            <th>
-                
-            </th>
-
-
+            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-             <tr>
+            <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.CourseId)
                 </td>
@@ -55,8 +50,5 @@
                 </td>
             </tr>
         }
-
     </tbody>
- 
-
 </table>
