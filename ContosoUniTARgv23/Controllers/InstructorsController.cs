@@ -20,7 +20,7 @@ namespace ContosoUniTARgv23.Controllers
 
         public async Task<IActionResult> Index(int? id, int? courseID)
         {
-            var viewModel = new ContosoUniTARgv23.Models.SchoolViewModels.InstructorIndexData();
+            var viewModel = new Models.SchoolViewModels.InstructorIndexData();
             viewModel.Instructors = await _context.Instructors
                   .Include(i => i.OfficeAssignment)
                   .Include(i => i.CourseAssignments)
